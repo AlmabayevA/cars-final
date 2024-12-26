@@ -1,15 +1,22 @@
 <template>
   <section id="catalog" class="relative w-full min-h-screen bg-black text-white px-4 py-10">
-    <div class="absolute inset-0 bg-no-repeat bg-cover bg-center opacity-20" :style="{ backgroundImage: `url('/img.png')` }"></div>
+    <div class="absolute inset-0 bg-no-repeat bg-cover bg-center opacity-20"
+         :style="{ backgroundImage: `url('/img.png')` }"></div>
 
     <div class="relative z-10 max-w-6xl mx-auto">
       <h2 class="text-4xl font-semibold mb-8 text-[#A5846C]">КАТАЛОГ</h2>
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <div v-for="car in cars" :key="car.id" class="bg-[#1C1C1C] rounded-xl overflow-hidden shadow-lg flex flex-col">
+        <div
+            v-for="(car, index) in cars"
+            :key="car.id"
+            class="bg-[#1C1C1C] rounded-xl overflow-hidden shadow-lg flex flex-col"
+        >
           <img :src="car.imageUrl" :alt="car.name" class="w-full h-48 object-cover">
           <div class="p-4 flex flex-col flex-grow">
-            <h3 class="text-xl font-bold text-[#C1A38A] mb-2">{{ car.name }}<br>{{ car.year }}</h3>
+            <h3 class="text-xl font-bold text-[#C1A38A] mb-2">
+              {{ car.name }}<br>{{ car.year }}
+            </h3>
             <p class="flex items-start text-sm text-gray-300 mb-2">
               <svg class="w-5 h-5 inline-block mr-1 mt-1" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M11.3,1.046c..."/>
@@ -19,10 +26,12 @@
                 <li>Коробка передач: {{ car.transmission }}</li>
               </ul>
             </p>
-            <p class="text-xl font-semibold text-white mb-4">{{ car.price }} тг/сутки</p>
+            <p class="text-xl font-semibold text-white mb-4">
+              {{ car.price }} тг/сутки
+            </p>
             <button
                 class="mt-auto bg-[#A5846C] text-white py-2 px-4 rounded hover:bg-[#8f6f5b] transition"
-                @click="openModal(car)"
+                @click="openModal(index)"
             >
               Арендовать авто
             </button>
@@ -38,8 +47,11 @@
           @click="showModal = false"
           class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4"
       >
-        <div class="relative bg-white text-black w-full max-w-md mx-auto rounded-lg shadow-lg p-8" @click.stop="showModal">
-          <h2 class="text-2xl font-semibold mb-2 text-black">Оставьте ваши данные и мы с вами свяжемся</h2>
+        <div class="relative bg-white text-black w-full max-w-md mx-auto rounded-lg shadow-lg p-8"
+             @click.stop="showModal">
+          <h2 class="text-2xl font-semibold mb-2 text-black">
+            Оставьте ваши данные и мы с вами свяжемся
+          </h2>
           <p class="text-gray-600 mb-6 text-sm">Скидка 10% всем новым клиентам!</p>
 
           <form @submit.prevent="handleFormSubmit">
@@ -59,12 +71,34 @@
                   type="tel"
                   placeholder="+7 (999) 999-99-99"
                   v-model="formData.phone"
-                  :class="{'border-red-500': !isPhoneValid && formData.phone}"
+                  :class="{ 'border-red-500': !isPhoneValid && formData.phone }"
                   class="w-full border border-gray-300 rounded-full py-2 pl-10 pr-4 focus:outline-none focus:border-[#A5846C]"
                   required
               />
             </label>
-            <p v-if="!isPhoneValid && formData.phone" class="text-red-500 text-sm mb-4">Пожалуйста, введите корректный номер в формате: +7 (XXX) XXX-XX-XX</p>
+            <p v-if="!isPhoneValid && formData.phone" class="text-red-500 text-sm mb-4">
+              Пожалуйста, введите корректный номер в формате: +7 (XXX) XXX-XX-XX
+            </p>
+
+            <label class="block mb-4">
+              <span class="text-[#A5846C] block mb-1">Дата начала</span>
+              <input
+                  type="date"
+                  v-model="formData.startDate"
+                  class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:border-[#A5846C]"
+                  required
+              />
+            </label>
+
+            <label class="block mb-4">
+              <span class="text-[#A5846C] block mb-1">Дата окончания</span>
+              <input
+                  type="date"
+                  v-model="formData.endDate"
+                  class="w-full border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:border-[#A5846C]"
+                  required
+              />
+            </label>
 
             <button
                 type="submit"
@@ -75,7 +109,9 @@
             </button>
           </form>
 
-          <p class="text-gray-500 text-xs mt-4 italic">*Не сдаем в аренду под такси</p>
+          <p class="text-gray-500 text-xs mt-4 italic">
+            *Не сдаем в аренду под такси
+          </p>
         </div>
       </div>
     </transition>
@@ -83,14 +119,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onBeforeMount, onMounted, watch} from 'vue'
+import { useCarStore } from '@/store/index.ts'  // <-- Import your Pinia store
 
+// Local states
 const showModal = ref(false)
 const formData = ref({
   name: '',
-  phone: ''
+  phone: '',
+  startDate: '',
+  endDate: ''
 })
 
+
+// Use the store
+const carStore = useCarStore()
+
+// Local array of available cars (could also come from an API, etc.)
 const cars = ref([
   {
     id: 1,
@@ -139,33 +184,51 @@ const cars = ref([
   }
 ])
 
-const rented_cars = ref([]) // Array to store rented cars
+// Store the currently selected car index
+const currentCarIndex = ref(null)
 
+// Phone validation
 const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/
-
 const isPhoneValid = computed(() => {
   if (formData.value.phone === '') return true
   return phoneRegex.test(formData.value.phone)
 })
 
-let currentCar = ref(null)
+// Lifecycle hook: add cars from local array to the Pinia store
+onBeforeMount(() => {
+  carStore.setCars(cars.value)
+})
+
+// Modal logic
+function openModal(index) {
+  currentCarIndex.value = index
+  showModal.value = true
+}
 
 function handleFormSubmit() {
   if (!isPhoneValid.value) {
     return
   }
-
-  // Add the rented car to the rented_cars array
-  rented_cars.value.push(currentCar.value)
+  // Rent the car by index (store action)
+  if (currentCarIndex.value !== null) {
+    carStore.rentCarByIndex(
+        currentCarIndex.value,
+        formData.value.startDate,
+        formData.value.endDate
+    )
+  }
 
   // Clear form and close modal
   formData.value.name = ''
   formData.value.phone = ''
+  formData.value.startDate = ''
+  formData.value.endDate = ''
+  currentCarIndex.value = null
   showModal.value = false
 }
+const rentedCars = computed(() => carStore.getRentedCars)
 
-function openModal(car) {
-  currentCar.value = car
-  showModal.value = true
-}
+watch(rentedCars.value, () => {
+  console.log(rentedCars.value)
+})
 </script>

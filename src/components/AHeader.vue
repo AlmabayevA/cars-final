@@ -6,6 +6,7 @@
         <a href="#about">О нас</a>
         <a href="#catalog">Каталог</a>
         <a href="#footer">Контакты</a>
+        <router-link to="/rented-cars">Арендованные авто</router-link>
       </div>
     </div>
   </div>
