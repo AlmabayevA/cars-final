@@ -3,12 +3,10 @@
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl font-semibold mb-8 text-[#A5846C]">Арендованные автомобили</h2>
 
-      <!-- If no cars rented yet -->
       <div v-if="rentedCars.length === 0" class="text-center text-gray-500">
         Нет арендованных автомобилей.
       </div>
 
-      <!-- Otherwise, display them as cards -->
       <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <div
             v-for="(car, index) in rentedCars"

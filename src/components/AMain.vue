@@ -120,7 +120,16 @@
 
 <script setup>
 import {ref, computed, onBeforeMount, onMounted, watch} from 'vue'
-import { useCarStore } from '@/store/index.ts'  // <-- Import your Pinia store
+import { useCarStore } from '@/store/index.ts'
+import hyundaiElantra from '@/assets/images/elantra2019.jpg';
+import Sclass from '@/assets/images/222.jpg';
+import k5 from '@/assets/images/k5.jpg';
+import RX from '@/assets/images/RX.jpg';
+import X5 from '@/assets/images/X5.jpg';
+import Camry from '@/assets/images/camry.jpeg';
+import Supra from '@/assets/images/supra.png';
+import LC500 from '@/assets/images/LC.png';
+import RR from '@/assets/images/RR.jpg';
 
 // Local states
 const showModal = ref(false)
@@ -132,74 +141,103 @@ const formData = ref({
 })
 
 
-// Use the store
 const carStore = useCarStore()
-
-// Local array of available cars (could also come from an API, etc.)
 const cars = ref([
   {
     id: 1,
-    name: 'HYUNDAI ELANTRA 2018-2020',
-    year: '2018-2020',
+    name: 'HYUNDAI ELANTRA',
+    year: '2019',
     engine: '2.5',
     transmission: 'автомат',
     price: 18000,
-    imageUrl: '',  // Add your image URL here
+    imageUrl: hyundaiElantra,
   },
   {
     id: 2,
-    name: 'KIA K3 2022-2023',
-    year: '2022-2023',
-    engine: '1.6',
+    name: 'MERCEDES-BENZ S-CLASS',
+    year: '2021',
+    engine: '4.0',
     transmission: 'автомат',
-    price: 23000,
-    imageUrl: '',  // Add your image URL here
+    price: 140000,
+    imageUrl: Sclass,
   },
   {
     id: 3,
-    name: 'HYUNDAI ELANTRA 2022-2024',
-    year: '2022-2024',
-    engine: '1.6',
+    name: 'LEXUS RX 350',
+    year: '2019',
+    engine: '3.5',
     transmission: 'автомат',
-    price: 25000,
-    imageUrl: '',  // Add your image URL here
+    price: 60000,
+    imageUrl: RX,
   },
   {
     id: 4,
-    name: 'HYUNDAI SONATA 2021',
-    year: '2021',
-    engine: '3.5',
+    name: 'KIA K5',
+    year: '2022',
+    engine: '2.5',
     transmission: 'автомат',
     price: 35000,
-    imageUrl: '',  // Add your image URL here
+    imageUrl: k5,
   },
   {
     id: 5,
-    name: 'TOYOTA CAMRY 75 2024',
-    year: '2024',
-    engine: '2.5',
+    name: 'BMW X5',
+    year: '2023',
+    engine: '4.4',
     transmission: 'автомат',
-    price: 40000,
-    imageUrl: '',  // Add your image URL here
+    price: 120000,
+    imageUrl: X5,
+  },
+  {
+    id: 6,
+    name: 'TOYOTA CAMRY',
+    year: '2022',
+    engine: '3.5',
+    transmission: 'автомат',
+    price: 45000,
+    imageUrl: Camry,
+  },
+  {
+    id: 7,
+    name: 'TOYOTA SUPRA',
+    year: '2023',
+    engine: '3.0',
+    transmission: 'механика',
+    price: 210000,
+    imageUrl: Supra,
+  },
+  {
+    id: 8,
+    name: 'LEXUS LC 500',
+    year: '2024',
+    engine: '5.0',
+    transmission: 'автомат',
+    price: 320000,
+    imageUrl: LC500,
+  },
+  {
+    id: 9,
+    name: 'ROLLS ROYCE PHANTOM',
+    year: '2024',
+    engine: '6.75',
+    transmission: 'автомат',
+    price: 650000,
+    imageUrl: RR,
   }
 ])
 
-// Store the currently selected car index
 const currentCarIndex = ref(null)
 
-// Phone validation
 const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/
 const isPhoneValid = computed(() => {
   if (formData.value.phone === '') return true
   return phoneRegex.test(formData.value.phone)
 })
 
-// Lifecycle hook: add cars from local array to the Pinia store
 onBeforeMount(() => {
   carStore.setCars(cars.value)
 })
 
-// Modal logic
 function openModal(index) {
   currentCarIndex.value = index
   showModal.value = true
@@ -218,7 +256,6 @@ function handleFormSubmit() {
     )
   }
 
-  // Clear form and close modal
   formData.value.name = ''
   formData.value.phone = ''
   formData.value.startDate = ''
