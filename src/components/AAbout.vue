@@ -1,18 +1,14 @@
 <template>
   <section id="about" class="relative w-full min-h-[500px] bg-neutral-900 text-white px-4 py-16">
-    <!-- Background silhouette of a car, adjust opacity and image URL as needed -->
     <div
         class="absolute inset-0 bg-no-repeat bg-center bg-contain opacity-10"
         :style="{ backgroundImage: `url('/path/to/car-silhouette.png')` }"
     ></div>
 
     <div class="relative z-10 max-w-6xl mx-auto">
-      <!-- Section Heading -->
       <h2 class="text-4xl font-semibold mb-8 text-[#A5846C]">О НАС</h2>
 
-      <!-- Features Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
-        <!-- Feature 1 -->
         <div class="flex flex-col items-center">
           <div class="flex items-center gap-2 mb-2">
             <span class="text-5xl font-bold text-[#A5846C]">01</span>
